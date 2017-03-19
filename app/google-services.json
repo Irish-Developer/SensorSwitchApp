@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "98671210685",
+    "firebase_url": "https://sensor-switch-app.firebaseio.com",
+    "project_id": "sensor-switch-app",
+    "storage_bucket": "sensor-switch-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98671210685:android:c89f42d44ce3a0a7",
+        "android_client_info": {
+          "package_name": "com.project.youcef.sensorswitchapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98671210685-ur63ocvs4ikcdf37ncqb90juecfdend0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.youcef.sensorswitchapp",
+            "certificate_hash": "f93dd87a34474e05055c125f1b1cd500bcf5be3b"
+          }
+        },
+        {
+          "client_id": "98671210685-4hkhu7qbmb76abf5jks8l5j2dfqf7nom.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR1DCtFPVS9QnvagC4bNadvOLaihyRLbg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98671210685-4hkhu7qbmb76abf5jks8l5j2dfqf7nom.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
