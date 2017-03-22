@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,7 +27,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,8 +42,11 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
 
     private RequestQueue mQueue;
     private TextView view;
+    private ProgressBar progressBar;
     HashMap<String, String> myHashmap = new HashMap();
     ToggleButton toggle1, toggle2, toggle3, toggle4;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener fireAuthListener;
 
 
     @Override
@@ -53,6 +58,25 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         toggle2 = (ToggleButton) findViewById(R.id.micTBtn);
         toggle3 = (ToggleButton) findViewById(R.id.tempTBtn);
         toggle4 = (ToggleButton) findViewById(R.id.analogTBtn);
+        auth = FirebaseAuth.getInstance();
+
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        // this listener will be called when there is change in firebase user session
+        fireAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
+            }
+        };
 
         view = (TextView) findViewById(R.id.textView);
         String url = "https://dweet.io/get/latest/dweet/for/youcef_iot?";                   //this is where the dweets are received from
@@ -202,34 +226,43 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
     }
 
 
-
-    // this listener will be called when there is change in firebase user session
-    FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user == null) {
-                // user auth state is changed - user is null
-                // launch login activity
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-            }
-        }
-    };
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+
         return true;
     }
+
+    //sign out method
+    public void signOut() {
+        auth.signOut();
+        Log.d("myTag","SignOut activated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(fireAuthListener);
+        Log.d("myTag","onStart "+ fireAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (fireAuthListener != null) {
+            auth.removeAuthStateListener(fireAuthListener);
+            Log.d("myTag","onStop ");
+        }
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 //Sign out
-                AuthUI.getInstance().signOut(this);
+                signOut();
+                Log.d("myTag","Signout");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
